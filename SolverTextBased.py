@@ -12,15 +12,49 @@ board = [
         [0, 4, 9, 2, 0, 6, 0, 0, 7]
     ]
 
-# domain = [[0] * 9 for i in range(9)]
-# for i in range(9):
-#     for j in range(9):
-#         if board[i][j] == 0:
-#             domain[i][j] = [x for x in range(1,10)]
-#         else:
-#             domain[i][j] = board[i][j]
+domain = [[0] * 9 for i in range(9)]
+for i in range(9):
+    for j in range(9):
+        if board[i][j] == 0:
+            domain[i][j] = [x for x in range(1,10)]
+        else:
+            domain[i][j] = board[i][j]
+
+def solve_backtracking(bo):
+    """
+    Solve the board using backtracking algorithm
+    """
+    pos = find_empty(bo)
+    if pos is None:
+        return True
+    
+    for i in range(1,10):
+        if is_valid(bo, pos, i):
+            bo[pos[0]][pos[1]] = i
+            temp = copy.deepcopy(bo)
+            if solve_backtracking(bo) == True:
+                return True
+            else:
+                for i in range(9):
+                    for j in range(9):
+                        bo[i][j] = temp[i][j]
+    
+    return False
+
+def solve_forward_checking(bo):
+    """
+    Solve the board using forward checking algorithm
+    """
+    pos = find_empty(bo)
+    if pos is None:
+        return True
+    
+    return False
 
 def is_valid(bo, pos, num):
+    """
+    Return True if the attempted move is valid
+    """
     for i in range(9):
         if bo[pos[0]][i] == num:
             return False
@@ -40,30 +74,15 @@ def is_valid(bo, pos, num):
     return True
 
 def find_empty(bo):
+    """
+    Find and return an empty position in the board
+    """
     for i in range(9):
         for j in range(9):
             if bo[i][j] == 0:
                 return (i,j)
 
     return None
-
-def solve(bo):
-    pos = find_empty(bo)
-    if pos is None:
-        return True
-    
-    for i in range(1,10):
-        if is_valid(bo, pos, i):
-            bo[pos[0]][pos[1]] = i
-            temp = copy.deepcopy(bo)
-            if solve(bo) == True:
-                return True
-            else:
-                for i in range(9):
-                    for j in range(9):
-                        bo[i][j] = temp[i][j]
-    
-    return False
 
 def print_board(bo):
     """
@@ -83,6 +102,5 @@ def print_board(bo):
             else:
                 print(str(bo[i][j]) + " ", end="")
 
-print(solve(board))
+print(solve_backtracking(board))
 print_board(board)
-        
