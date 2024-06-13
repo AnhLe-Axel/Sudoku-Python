@@ -30,6 +30,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            grid.click(event.pos)
 
     screen.fill("White")
     grid.draw(font)
