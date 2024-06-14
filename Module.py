@@ -8,7 +8,7 @@ class Square:
         self.value = value
         self.width = width
         self.selected = False
-        self.border_rect = pygame.Surface((width, width)).get_rect(center=(row*width + width/2, col*width + width/2))
+        self.border_rect = pygame.Surface((width, width)).get_rect(center=(col*width + width/2, row*width + width/2))
 
     def select(self):
         if self.selected == False: self.selected = True
@@ -18,7 +18,7 @@ class Square:
 
     def draw(self, font, surface):
         text = font.render("" if self.value == 0 else str(self.value), True, (0, 0, 0))
-        text_rect = text.get_rect(center=(self.row*self.width + self.width/2, self.col*self.width + self.width/2))
+        text_rect = text.get_rect(center=(self.col*self.width + self.width/2, self.row*self.width + self.width/2))
         surface.blit(text, text_rect)
 
         if self.selected:
@@ -67,11 +67,11 @@ class Grid:
         return valid
     
     def write(self, num):
-        self.print_board(self.solution)
-        if self.selected_square is not None and self.solution[self.selected_square.row][self.selected_square.col] == num:
-            self.board[self.selected_square.row][self.selected_square.col] = num
-            self.squares[self.selected_square.row][self.selected_square.col] = num
-
+        sel_row = self.selected_square.row
+        sel_col = self.selected_square.col
+        if self.selected_square is not None and self.solution[sel_row][sel_col] == num:
+            self.squares[sel_row][sel_col].value = num
+            self.squares[sel_row][sel_col].de_select()
 
     def is_valid(self, bo, pos, num):
         """
@@ -101,8 +101,8 @@ class Grid:
         Find and return an empty position in the board
         """
 
-        for i in range(9):
-            for j in range(9):
+        for i in range(self.size):
+            for j in range(self.size):
                 if bo[i][j] == 0:
                     return (i,j)
 
