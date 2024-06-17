@@ -72,6 +72,8 @@ class Grid:
         if self.selected_square is not None and self.solution[sel_row][sel_col] == num:
             self.squares[sel_row][sel_col].value = num
             self.squares[sel_row][sel_col].de_select()
+            return True
+        return False
 
     def is_valid(self, bo, pos, num):
         """
